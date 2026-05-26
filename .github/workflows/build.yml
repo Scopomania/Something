@@ -1,0 +1,33 @@
+name: Build Mod
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Unzip source
+        run: unzip loadinglog-v2.zip
+
+      - name: Setup Gradle wrapper
+        run: |
+          mkdir -p loadinglog2/gradle/wrapper
+          echo "distributionUrl=https\://services.gradle.org/distributions/gradle-8.4-bin.zip" > loadinglog2/gradle/wrapper/gradle-wrapper.properties
+          cd loadinglog2 && gradle wrapper --gradle-version 8.4
+
+      - name: Build
+        run: cd loadinglog2 && ./gradlew build --no-daemon
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v3
+        with:
+          name: loadinglog-mod
+          path: loadinglog2/build/libs/*.jar
