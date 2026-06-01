@@ -27,7 +27,7 @@ jobs:
         run: cd loadinglog2 && ./gradlew build --no-daemon
 
       - name: Upload JAR
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: loadinglog-mod
           path: loadinglog2/build/libs/*.jar
